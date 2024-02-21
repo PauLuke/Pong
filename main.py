@@ -12,9 +12,9 @@ def init_menu():
                 sys.exit()
 
         x, y = pygame.mouse.get_pos()
-        screen.blit(menu, (0, 0))
+        SCREEN.blit(MENU, (0, 0))
         pygame.display.flip()
-        clock.tick(fps)
+        CLOCK.tick(FPS)
 
         for event_menu in pygame.event.get():
             if event_menu.type == pygame.QUIT:
@@ -31,15 +31,15 @@ def init_menu():
                 pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
 
 
-def draw_objects(object_to_draw):
-    pygame.draw.rect(screen, light_grey, object_to_draw)
+def draw_object(object_to_draw):
+    pygame.draw.rect(SCREEN, LIGHT_GREY, object_to_draw)
 
 
 def draw_score():
-    score_1 = font.render(f"{score_player_1}", True, darker_grey)
-    screen.blit(score_1, (40, 20))
-    score_2 = font.render(f"{score_player_2}", True, darker_grey)
-    screen.blit(score_2, (screen_width - score_2.get_width() - 40, 20))
+    score_1 = FONT.render(f"{score_player_1}", True, DARK_GREY)
+    SCREEN.blit(score_1, (40, 20))
+    score_2 = FONT.render(f"{score_player_2}", True, DARK_GREY)
+    SCREEN.blit(score_2, (SCREEN_WIDTH - score_2.get_width() - 40, 20))
 
 
 def score_count(player):
@@ -54,7 +54,7 @@ def score_count(player):
 def ball_reset():
     global ball_speed_x, ball_speed_y
 
-    ball.center = (screen_width / 2, screen_height / 2)
+    ball.center = (SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
     ball_speed_x *= choice((1, -1))
     ball_speed_y *= choice((1, -1))
 
@@ -66,12 +66,12 @@ def ball_animation():
     ball.y += ball_speed_y
 
     # Setting boundaries for the ball
-    if ball.top <= 0 or ball.bottom >= screen_height:
+    if ball.top <= 0 or ball.bottom >= SCREEN_HEIGHT:
         ball_speed_y *= -1
     if ball.left <= 0:
         ball_reset()
         score_count(2)
-    if ball.right >= screen_width:
+    if ball.right >= SCREEN_WIDTH:
         ball_reset()
         score_count(1)
 
@@ -88,12 +88,12 @@ def solo_player_mode():
         player_1.y += 10
     if player_1.top <= 0:
         player_1.top = 0
-    if player_1.bottom >= screen_height:
-        player_1.bottom = screen_height
+    if player_1.bottom >= SCREEN_HEIGHT:
+        player_1.bottom = SCREEN_HEIGHT
 
     if keys[pygame.K_LEFT] and player_2.top >= 0:
         player_2.y -= 10
-    if keys[pygame.K_RIGHT] and player_2.bottom <= screen_height:
+    if keys[pygame.K_RIGHT] and player_2.bottom <= SCREEN_HEIGHT:
         player_2.y += 10
 
 
@@ -102,26 +102,23 @@ def players_animation():
 
     if keys[pygame.K_d] and player_1.top >= 0:
         player_1.y -= 10
-    if keys[pygame.K_a] and player_1.bottom <= screen_height:
+    if keys[pygame.K_a] and player_1.bottom <= SCREEN_HEIGHT:
         player_1.y += 10
 
     if keys[pygame.K_LEFT] and player_2.top >= 0:
         player_2.y -= 10
-    if keys[pygame.K_RIGHT] and player_2.bottom <= screen_height:
+    if keys[pygame.K_RIGHT] and player_2.bottom <= SCREEN_HEIGHT:
         player_2.y += 10
 
 
-# Frames
-fps = 60
+FPS = 60
 
-# Screen size
-screen_width = 1000
-screen_height = 600
+SCREEN_WIDTH = 1000
+SCREEN_HEIGHT = 600
 
-# Colors
-bg_color = pygame.Color('grey12')
-light_grey = (200, 200, 200)
-darker_grey = (105, 105, 105)
+BG_COLOR = pygame.Color('grey12')
+LIGHT_GREY = (200, 200, 200)
+DARK_GREY = (105, 105, 105)
 
 # Ball speed in each axis
 ball_speed_x = 7
@@ -132,15 +129,15 @@ score_player_1 = 0
 score_player_2 = 0
 
 pygame.init()
-screen = pygame.display.set_mode((screen_width, screen_height))
-clock = pygame.time.Clock()
-font = pygame.font.Font(None, 36)
-menu = pygame.image.load("./menu.png")
+SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+CLOCK = pygame.time.Clock()
+FONT = pygame.font.Font(None, 36)
+MENU = pygame.image.load("./menu.png")
 
 # Rects for the ball, player 1 and player 2
-ball = pygame.Rect(screen_width / 2 - 10, screen_height / 2 - 10, 20, 20)
-player_1 = pygame.Rect(5, screen_height / 2 - 45, 10, 90)
-player_2 = pygame.Rect(screen_width - 15, screen_height / 2 - 45, 10, 90)
+ball = pygame.Rect(SCREEN_WIDTH / 2 - 10, SCREEN_HEIGHT / 2 - 10, 20, 20)
+player_1 = pygame.Rect(5, SCREEN_HEIGHT / 2 - 45, 10, 90)
+player_2 = pygame.Rect(SCREEN_WIDTH - 15, SCREEN_HEIGHT / 2 - 45, 10, 90)
 
 game_mode = init_menu()
 
@@ -160,22 +157,22 @@ while running:
         solo_player_mode()
 
     # Set background color
-    screen.fill(bg_color)
+    SCREEN.fill(BG_COLOR)
 
     # Drawing the dashed  central line
     for i in range(0, 40, 3):
-        draw_objects((screen_width / 2 - 1.5, i * 15, 3, 15))
+        draw_object((SCREEN_WIDTH / 2 - 1.5, i * 15, 3, 15))
 
     # Drawing the ball
-    draw_objects(ball)
+    draw_object(ball)
     # Drawing player 1
-    draw_objects(player_1)
+    draw_object(player_1)
     # Drawing player 2
-    draw_objects(player_2)
+    draw_object(player_2)
 
     draw_score()
 
     pygame.display.flip()
-    clock.tick(fps)
+    CLOCK.tick(FPS)
 
 pygame.quit()
